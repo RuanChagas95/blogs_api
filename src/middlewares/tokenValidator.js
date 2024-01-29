@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 function tokenValidator(req, _res, next) {
-  const token = req.headers.authorization;
+  const token = req.headers.authorization.replace('Bearer ', '');
   if (!token) throw new Error('401|Token not found');
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
