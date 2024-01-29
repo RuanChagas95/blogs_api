@@ -9,4 +9,13 @@ async function postController(req, res, next) {
   }
 }
 
-module.exports = { postController };
+async function getController(req, res, next) {
+  try {
+    const { status, payload } = await userService.getService(req.locals.decodedToken);
+    res.status(status).json(payload);
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { postController, getController };
