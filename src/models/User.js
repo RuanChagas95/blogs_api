@@ -22,10 +22,9 @@ const UserModel = (sequelize, DataTypes) =>
       },
       image: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
     },
-    { timestamps: false, tableName: "users" }
+    { timestamps: false, tableName: "users"}
   );
 
 module.exports = UserModel;
