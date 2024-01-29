@@ -1,3 +1,3 @@
 const userSchema = require('./userSchema');
 
-module.exports = { '/user': userSchema };
+module.exports = { '/user@POST': userSchema };
