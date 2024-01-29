@@ -18,4 +18,13 @@ async function getController(req, res, next) {
   }
 }
 
-module.exports = { postController, getController };
+async function idGetController(req, res, next) {
+  try {
+    const { status, payload } = await userService.idGetService(req.params.id);
+    res.status(status).json(payload);
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { postController, getController, idGetController };

@@ -20,4 +20,13 @@ async function getService() {
     payload: users.map((user) => camelize(user.dataValues)),
   };
 }
-module.exports = { postService, getService };
+
+async function idGetService(id) {
+  const user = await User.findOne({
+    attributes: { exclude: ['password'] },
+    where: { id },
+  });
+  if (!user) throw new Error('404|User does not exist');
+  return { status: 200, payload: camelize(user.dataValues) };
+}
+module.exports = { postService, getService, idGetService };
