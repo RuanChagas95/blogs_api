@@ -1,7 +1,7 @@
 const route = require('express').Router();
 const { postController } = require('../../controllers/userController');
-const { userValidator } = require('../../middlewares/bodyValidator');
+const bodyValidator = require('../../middlewares/bodyValidator');
 
-route.post('/', userValidator, postController);
+route.post('/', bodyValidator, postController);
 
 module.exports = route;

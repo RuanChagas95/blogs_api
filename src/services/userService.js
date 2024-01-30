@@ -4,14 +4,14 @@ const { User } = require('../models');
 const UserExists = require('../utils/UserExits');
 const newToken = require('../utils/newToken');
 
-async function postService(userData) {
+async function createUser(userData) {
   const { email } = userData;
   if (await UserExists(email)) throw new Error('409|User already registered');
   await User.create(snakeize(userData));
   return { status: 201, payload: { token: newToken(email) } };
 }
 
-async function getService() {
+async function getUsers() {
   const users = await User.findAll({
     attributes: { exclude: ['password'] },
   });
@@ -21,7 +21,7 @@ async function getService() {
   };
 }
 
-async function idGetService(id) {
+async function getUserById(id) {
   const user = await User.findOne({
     attributes: { exclude: ['password'] },
     where: { id },
@@ -29,4 +29,14 @@ async function idGetService(id) {
   if (!user) throw new Error('404|User does not exist');
   return { status: 200, payload: camelize(user.dataValues) };
 }
-module.exports = { postService, getService, idGetService };
+
+async function getUserByEmail(email) {
+  const user = await User.findOne({
+    attributes: { exclude: ['password'] },
+    where: { email },
+  });
+  if (!user) throw new Error('404|User does not exist');
+  return { status: 200, payload: camelize(user.dataValues) };
+}
+
+module.exports = { createUser, getUsers, getUserById, getUserByEmail };
