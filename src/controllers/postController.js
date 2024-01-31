@@ -1,4 +1,4 @@
-const { createPost } = require('../services/postService');
+const { createPost, getPosts } = require('../services/postService');
 
 async function createPostController(req, res, next) {
   try {
@@ -11,4 +11,13 @@ async function createPostController(req, res, next) {
   }
 }
 
-module.exports = { createPostController };
+async function getPostsController(_req, res, next) {
+  try {
+    const { status, payload } = await getPosts();
+    res.status(status).json(payload);
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { createPostController, getPostsController };
