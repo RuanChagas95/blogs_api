@@ -1,14 +1,17 @@
 const jwt = require('jsonwebtoken');
+const { getUserByEmail } = require('../services/userService');
 
-function tokenValidator(req, _res, next) {
-  const token = req.headers.authorization;
-  if (!token) throw new Error('401|Token not found');
+async function tokenValidator(req, _res, next) {
   try {
-    const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
-    req.locals = { decodedToken: decoded };
+    const token = req.headers.authorization;
+    if (!token) throw new Error('401|Token not found');
+    const { email } = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
+    const { payload: user } = await getUserByEmail(email);
+    req.locals = { email, id: user.id };
     next();
   } catch (error) {
-    if (error.message === 'jwt malformed') throw new Error('401|Expired or invalid token');
+    if (error.message === 'jwt malformed') return next(new Error('401|Expired or invalid token'));
+    next(error);
   }
 }
 
