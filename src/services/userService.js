@@ -22,9 +22,8 @@ async function getUsers() {
 }
 
 async function getUserById(id) {
-  const user = await User.findOne({
+  const user = await User.findByPk(id, {
     attributes: { exclude: ['password'] },
-    where: { id },
   });
   if (!user) throw new Error('404|User does not exist');
   return { status: 200, payload: camelize(user.dataValues) };
