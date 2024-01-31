@@ -3,7 +3,7 @@ const error = (err, _, res, _next) => {
   if ((status && message && Number(status))) {
     return res.status(Number(status)).json({ message });
   }
-  console.log(err.message);
+  console.log(err);
   res.status(500).send();
 };
 
