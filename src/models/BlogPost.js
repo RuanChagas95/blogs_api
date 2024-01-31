@@ -15,20 +15,23 @@ const PostModel = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      user_id: {
+      userId: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: "user_id",
       },
       published: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
       updated: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
     },
-    { timestamps: false, tableName: "blog_posts" }
+    { timestamps: false, tableName: "blog_posts", underscored: true}
   );
 
   BlogPost.associate = (models) => {
