@@ -1,17 +1,21 @@
 function PostCategoryModel(sequelize, DataTypes) {
     const PostCategory = sequelize.define('PostCategory', {
-       post_id: {
+       postId: {
            type: DataTypes.INTEGER,
            primaryKey: true,
            allowNull: false,
+           field: 'post_id'
        },
-       category_id: {
+       categoryId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        allowNull: false,
+        field: 'category_id'
     },
     }, {
-        tableName: 'post_categories',
-        timestamps: false
+        tableName: 'posts_categories',
+        timestamps: false,
+        underscored: true
     });
     PostCategory.associate = (models) => {
         models.BlogPost.belongsToMany(models.Category, {
