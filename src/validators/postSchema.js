@@ -9,6 +9,7 @@ const postSchema = Joi.object({
 const validate = (data) => {
   const { error } = postSchema.validate(data);
   if (error) throw new Error('400|Some required fields are missing');
+  return {};
 };
 
 module.exports = { validate };
