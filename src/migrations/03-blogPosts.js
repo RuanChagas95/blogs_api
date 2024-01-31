@@ -19,10 +19,6 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: "users",
-          key: "id",
-        },
       },
       published: {
         type: Sequelize.DATE,
@@ -32,6 +28,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+    }, {
+      timestamps: false,
+      underscored: true,
+    
     });
   },
   

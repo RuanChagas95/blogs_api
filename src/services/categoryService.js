@@ -1,15 +1,9 @@
-const { Category } = require('../models');
+const { Category, PostCategory } = require('../models');
 
-async function createCategory(name) {
-  const category = await Category.create({ name });
+const createCategory = async (name) => Category.create({ name });
 
-  return { status: 201, payload: category };
-}
+const getCategories = async () => Category.findAll();
 
-async function getCategories() {
-  const category = await Category.findAll();
+const getCategoryById = async (id) => Category.findByPk(id);
 
-  return { status: 200, payload: category };
-}
-
-module.exports = { createCategory, getCategories };
+module.exports = { createCategory, getCategories, getCategoriesByPostId, getCategoryById };

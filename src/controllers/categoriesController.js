@@ -1,17 +1,23 @@
 const { getCategories, createCategory } = require('../services/categoryService');
 
-async function postController(req, res, next) {
-  const { name } = req.body;
-  if (!name || typeof name !== 'string') return next(new Error('400|"name" is required'));
-  const { status, payload } = await createCategory(name);
-  if (payload.error) return next(payload.error);
-  res.status(status).json(payload);
+async function createCategoryController(req, res, next) {
+  try {
+    const { name } = req.body;
+    if (!name || typeof name !== 'string') return next(new Error('400|"name" is required'));
+    const category = await createCategory(name);
+    res.status(201).json(category);
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function getController(_req, res, next) {
-  const { status, payload } = await getCategories();
-  if (payload.error) return next(payload.error);
-  res.status(status).json(payload);
+async function getCategoriesController(_req, res, next) {
+  try {
+    const categories = await getCategories();
+    res.status(200).json(categories);
+  } catch (error) {
+    next(error);
+  }
 }
 
-module.exports = { postController, getController };
+module.exports = { createCategoryController, getCategoriesController };

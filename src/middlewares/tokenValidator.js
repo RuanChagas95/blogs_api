@@ -6,7 +6,7 @@ async function tokenValidator(req, _res, next) {
     const token = req.headers.authorization;
     if (!token) throw new Error('401|Token not found');
     const { email } = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
-    const { payload: user } = await getUserByEmail(email);
+    const user = await getUserByEmail(email);
     req.locals = { email, id: user.id };
     next();
   } catch (error) {
