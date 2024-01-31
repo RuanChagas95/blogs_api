@@ -1,9 +1,9 @@
 const route = require('express').Router();
 const tokenValidator = require('../../middlewares/tokenValidator');
-const { getController, idGetController } = require('../../controllers/userController');
+const { getUsers, getUserById } = require('../../controllers/userController');
 
 route.use(tokenValidator);
 
-route.get('/', getController);
-route.get('/:id', idGetController);
+route.get('/', getUsers);
+route.get('/:id', getUserById);
 module.exports = route;

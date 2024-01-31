@@ -1,6 +1,6 @@
 const userService = require('../services/userService');
 
-async function postController(req, res, next) {
+async function createUser(req, res, next) {
   try {
     const { status, payload } = await userService.createUser(req.body);
     res.status(status).json(payload);
@@ -9,7 +9,7 @@ async function postController(req, res, next) {
   }
 }
 
-async function getController(req, res, next) {
+async function getUsers(req, res, next) {
   try {
     const { status, payload } = await userService.getUsers(req.locals.decodedToken);
     res.status(status).json(payload);
@@ -18,7 +18,7 @@ async function getController(req, res, next) {
   }
 }
 
-async function idGetController(req, res, next) {
+async function getUserById(req, res, next) {
   try {
     const { status, payload } = await userService.getUserById(req.params.id);
     res.status(status).json(payload);
@@ -27,4 +27,4 @@ async function idGetController(req, res, next) {
   }
 }
 
-module.exports = { postController, getController, idGetController };
+module.exports = { createUser, getUsers, getUserById };
