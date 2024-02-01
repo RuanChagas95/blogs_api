@@ -20,4 +20,14 @@ async function getPostsController(_req, res, next) {
   }
 }
 
+async function getPostController(req, res, next) {
+  try {
+    const { id } = req.params;
+    const post = await getPostById(id);
+    res.status(200).json(post);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = { createPostController, getPostsController, getPostController };

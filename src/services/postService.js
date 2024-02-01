@@ -15,25 +15,35 @@ const createPost = async (userId, title, content, categoryIds) => {
   await Promise.all(categoryIds.map(async (currId) => {
     PostCategory.create({ postId: newPost.id, categoryId: currId });
   }));
-  return { status: 201, payload: newPost.dataValues };
+  return newPost.dataValues;
+};
+
+const convertPost = async (post) => {
+  const user = await getUserById(post.userId);
+  const categories = (await getCategoriesByPostId(post.id));
+  const { published, updated, title, content, id } = post;
+  return {
+    id,
+    title,
+    content,
+    published,
+    updated,
+    user,
+    categories,
+  };
 };
 
 const getPosts = async () => {
-  const posts = (await BlogPost.findAll()).map(async (post) => {
-    const user = await getUserById(post.userId);
-    const categories = (await getCategoriesByPostId(post.id));
-    const { published, updated, title, content, id } = post;
-    return {
-      id,
-      title,
-      content,
-      published,
-      updated,
-      user,
-      categories,
-    };
-  });
-  return { status: 200, payload: await Promise.all(posts) };
+  const posts = (await BlogPost.findAll()).map(convertPost);
+  return Promise.all(posts);
 };
 
-module.exports = { createPost, getPosts };
+const getPostById = async (id) => { 
+  const post = await BlogPost.findByPk(id);
+  if (!post) {
+    throw new Error('404|Post does not exist');
+  }
+  return convertPost(post);
+};
+
+module.exports = { createPost, getPosts, getPostById };
