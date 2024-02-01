@@ -1,7 +1,5 @@
-const { BlogPost, PostCategory } = require('../models');
+const { BlogPost, PostCategory, User, Category } = require('../models');
 const CategoryExists = require('../utils/categoryExists');
-const { getUserById } = require('./userService');
-const { getCategoriesByPostId } = require('./categoryService');
 
 const createPost = async (userId, title, content, categoryIds) => {
   await Promise.all(categoryIds.map(async (currId) => {
@@ -18,32 +16,22 @@ const createPost = async (userId, title, content, categoryIds) => {
   return newPost.dataValues;
 };
 
-const convertPost = async (post) => {
-  const user = await getUserById(post.userId);
-  const categories = (await getCategoriesByPostId(post.id));
-  const { published, updated, title, content, id } = post;
-  return {
-    id,
-    title,
-    content,
-    published,
-    updated,
-    user,
-    categories,
-  };
+const postConfig = { 
+  include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }, 
+    { model: Category, as: 'categories', through: { attributes: [] } },
+  ],
+  attributes: {
+    exclude: ['userId'],
+  },
 };
-
-const getPosts = async () => {
-  const posts = (await BlogPost.findAll()).map(convertPost);
-  return Promise.all(posts);
-};
+const getPosts = async () => BlogPost.findAll(postConfig);
 
 const getPostById = async (id) => { 
-  const post = await BlogPost.findByPk(id);
+  const post = await BlogPost.findByPk(id.postConfig);
   if (!post) {
     throw new Error('404|Post does not exist');
   }
-  return convertPost(post);
+  return post;
 };
 
 module.exports = { createPost, getPosts, getPostById };
