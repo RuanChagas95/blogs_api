@@ -1,4 +1,5 @@
-const { createPost, getPosts, getPostById, updatePost } = require('../services/postService');
+const { createPost,
+  getPosts, getPostById, updatePost, getPostsByQuery } = require('../services/postService');
 
 async function createPostController(req, res, next) {
   try {
@@ -41,4 +42,18 @@ async function putPostController(req, res, next) {
   }
 }
 
-module.exports = { createPostController, getPostsController, getPostController, putPostController };
+async function getPostsByQueryController(req, res, next) {
+  try {
+    const { q } = req.query;
+    const posts = await getPostsByQuery(q);
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { createPostController,
+  getPostsController,
+  getPostController,
+  putPostController,
+  getPostsByQueryController };
