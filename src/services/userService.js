@@ -33,4 +33,8 @@ async function getUserByEmail(email) {
   return user.dataValues;
 }
 
-module.exports = { createUser, getUsers, getUserById, getUserByEmail };
+async function deleteUser(id) {
+  await User.destroy({ where: { id } });
+}
+
+module.exports = { createUser, getUsers, getUserById, getUserByEmail, deleteUser };

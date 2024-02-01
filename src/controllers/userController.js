@@ -27,4 +27,13 @@ async function getUserById(req, res, next) {
   }
 }
 
-module.exports = { createUser, getUsers, getUserById };
+async function deleteUser(req, res, next) {
+  try {
+    await userService.deleteUser(req.locals.id);
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { createUser, getUsers, getUserById, deleteUser };
