@@ -27,11 +27,20 @@ const postConfig = {
 const getPosts = async () => BlogPost.findAll(postConfig);
 
 const getPostById = async (id) => { 
-  const post = await BlogPost.findByPk(id.postConfig);
+  const post = await BlogPost.findByPk(id, postConfig);
   if (!post) {
     throw new Error('404|Post does not exist');
   }
   return post;
 };
 
-module.exports = { createPost, getPosts, getPostById };
+const updatePost = async (ids, title, content) => {
+  const { postId, userId } = ids;
+  const post = await BlogPost.findByPk(postId);
+  if (!post) throw new Error('404|Post does not exist');
+  if (post.userId !== userId) throw new Error('401|Unauthorized user');
+  await post.update({ title, content, updated: new Date() });
+  return BlogPost.findByPk(postId, { ...postConfig, attributes: undefined });
+};
+
+module.exports = { createPost, getPosts, getPostById, updatePost };
