@@ -3,7 +3,7 @@ const { getCategories, createCategory } = require('../services/categoryService')
 async function createCategoryController(req, res, next) {
   try {
     const { name } = req.body;
-    if (!name || typeof name !== 'string') return next(new Error('400|"name" is required'));
+    if (!name || typeof name !== 'string') throw new Error('400|"name" is required');
     const category = await createCategory(name);
     res.status(201).json(category);
   } catch (error) {
